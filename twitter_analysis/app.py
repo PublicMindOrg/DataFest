@@ -8,7 +8,7 @@ sched = BackgroundScheduler(daemon=True)
 
 @app.route('/get_tweets/<string:query>')
 def get_tweets(query):
-    sched.add_job(get_all_tweets,'interval',args=[query],minutes=1,replace_existing=True)
+    sched.add_job(get_all_tweets,'interval',args=[query],minutes=5,replace_existing=True)
     sched.start()
     return 'Hey'
 
@@ -16,8 +16,8 @@ def get_all_tweets(query):
     
     client = tweepy.Client(bearer_token='AAAAAAAAAAAAAAAAAAAAAGT8bgEAAAAAJZslobYs39BqCSVn%2BipiFNxH1ao%3D5osYxvUKqEteDrWV2eOFIQvABR1QCTy2RhHS450UwS6yTQuVlb')
     header = ['Tweet', 'Date', 'Language']
-    query = 'covid'
-    with open('countries.csv', 'a', encoding='UTF8') as f:
+    filename = query+'.csv'
+    with open(filename, 'a', encoding='UTF8') as f:
         writer = csv.writer(f)
         count=0
         for tweet in tweepy.Paginator(client.search_recent_tweets,query = query,
